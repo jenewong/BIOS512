@@ -1,0 +1,3670 @@
+ 
+ 1          OPTIONS NONOTES NOSTIMER NOSOURCE NOSYNTAXCHECK;
+ 68         
+ 69         /*****************************************************************************
+ 70         Name: Jennifer Wong
+ 71         Program: EPID795_FinalProjectPart1_Wong.sas
+ 72             Date: November 3, 2021
+ 73         Description: Final Project Part 1 (parts A and B).
+ 74         *****************************************************************************/
+ 75         OPTIONS MERGENOBY=warn NODATE NONUMBER FORMCHAR="|----|+|---+=|-/\<>*";
+ 76         FOOTNOTE "EPID795_FinalProjectPart1_Wong.sas run at %SYSFUNC(DATETIME(), DATETIME.) by Jennifer Wong";
+ 77         /******************************* begin program ******************************/
+ 78         
+ 79         LIBNAME epid795 "/home/u59075382/epid795/Data";
+ NOTE: Libref EPID795 was successfully assigned as follows: 
+       Engine:        V9 
+       Physical Name: /home/u59075382/epid795/Data
+ 80         
+ 81         *Question A1.1;
+ 82         PROC CONTENTS DATA = epid795.birthscohort;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 83         TITLE "birthscohort data";
+ 84         RUN;
+ 
+ NOTE: PROCEDURE CONTENTS used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.00 seconds
+       memory              2823.50k
+       OS Memory           26536.00k
+       Timestamp           11/21/2021 12:02:51 AM
+       Step Count                        24  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     1202
+       Page Swaps                        0
+       Voluntary Context Switches        10
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           8
+       
+ 
+ 85         TITLE;
+ 86         *checking dataset - 61447 total observations, 9 variables;
+ 87         
+ 88         PROC UNIVARIATE DATA = epid795.birthscohort;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 89         VAR weeks;
+ 90         TITLE "Descriptive statistics for gestional age at birth";
+ 91         RUN;
+ 
+ NOTE: PROCEDURE UNIVARIATE used (Total process time):
+       real time           0.08 seconds
+       user cpu time       0.09 seconds
+       system cpu time     0.00 seconds
+       memory              1541.93k
+       OS Memory           26532.00k
+       Timestamp           11/21/2021 12:02:51 AM
+       Step Count                        25  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     449
+       Page Swaps                        0
+       Voluntary Context Switches        19
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           24
+       
+ 
+ 92         TITLE;
+ 93         
+ 94         *For gestational age at birth (variable "weeks"), there are no observations missing data
+ 95         or any extreme, out of range, and implausible values. All observations for gestional age
+ 96         fall between the plausible values of 20 weeks and 43 weeks.;
+ 97         *The mean gestational age is 39 weeks and the standard deviation is 2.1 weeks.;
+ 98         
+ 99         PROC MEANS DATA = epid795.birthscohort N NMISS MEAN STD RANGE MEDIAN P5 P95;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 100        VAR weeks;
+ 101        TITLE "Descriptive statistics for gestional age at birth";
+ 102        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set EPID795.BIRTHSCOHORT.
+ NOTE: PROCEDURE MEANS used (Total process time):
+       real time           0.05 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.01 seconds
+       memory              7725.90k
+       OS Memory           32968.00k
+       Timestamp           11/21/2021 12:02:51 AM
+       Step Count                        26  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     1930
+       Page Swaps                        0
+       Voluntary Context Switches        43
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 103        TITLE;
+ 104        *checking for any missing observations, mean, std dev, range, median, 5th and 9th percentile;
+ 105        
+ 106        PROC FREQ DATA = epid795.birthscohort;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 107        TABLES weeks / MISSING;
+ 108        TITLE "Frequency of gestional age at birth";
+ 109        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set EPID795.BIRTHSCOHORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.06 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.00 seconds
+       memory              1631.59k
+       OS Memory           27048.00k
+       Timestamp           11/21/2021 12:02:51 AM
+       Step Count                        27  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     264
+       Page Swaps                        0
+       Voluntary Context Switches        27
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 110        TITLE;
+ 111        *checking for any extreme, out of range, and implausible values for gestional age (weeks);
+ 112        
+ 113        
+ 114        *Question A1.2;
+ 115        PROC SGPLOT DATA = epid795.birthscohort;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 116        HISTOGRAM weeks / BINWIDTH = 1;
+ 117        XAXIS LABEL = "Gestational age at birth (weeks)" LABELATTRS = (size = 12);
+ 118        YAXIS LABEL = "Percent of births (%)" LABELATTRS = (size = 12);
+ 119        TITLE HEIGHT = 1.7 "Percent of Births by Gestational Age at Birth";
+ 120        FOOTNOTE HEIGHT = 1.1 "Figure 1.  Gestational age at birth was measured from a cohort study
+ 121        population of 61,447 North Carolina live births in 2015. All data were derived from North Carolina
+ 122        Live Birth Certificate data for 2015. The study population included live singleton births without
+ NOTE: The quoted string currently being processed has become more than 262 bytes long.  You might have unbalanced quotation marks.
+ 123        congenital malformations that experienced the entire risk period for preterm birth (the 17-week
+ 124        interval beginning with the 21st week of gestation and ending upon completion of the 37th week of
+ 125        gestation) during 2015. Births with unknown gestational age were excluded. The gestational
+ 126        age at birth has a minimum of 20 weeks, maximum of 43 weeks, median and mean of 39 weeks,
+ 127        and standard deviation of 2.1 weeks.";
+ 128        RUN;
+ 
+ NOTE: PROCEDURE SGPLOT used (Total process time):
+       real time           2.36 seconds
+       user cpu time       0.14 seconds
+       system cpu time     0.01 seconds
+       memory              9425.81k
+       OS Memory           36652.00k
+       Timestamp           11/21/2021 12:02:53 AM
+       Step Count                        28  Switch Count  13
+       Page Faults                       0
+       Page Reclaims                     4090
+       Page Swaps                        0
+       Voluntary Context Switches        357
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           4984
+       
+ NOTE: There were 61447 observations read from the data set EPID795.BIRTHSCOHORT.
+ 
+ 129        TITLE;
+ 130        FOOTNOTE;
+ 131        
+ 132        *Question A2.1;
+ 133        PROC UNIVARIATE DATA = epid795.birthscohort;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 134        VAR weeknum;
+ 135        TITLE "Descriptive statistics for week of birth in the year 2015";
+ 136        RUN;
+ 
+ NOTE: PROCEDURE UNIVARIATE used (Total process time):
+       real time           0.08 seconds
+       user cpu time       0.08 seconds
+       system cpu time     0.00 seconds
+       memory              1547.71k
+       OS Memory           35492.00k
+       Timestamp           11/21/2021 12:02:53 AM
+       Step Count                        29  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     193
+       Page Swaps                        0
+       Voluntary Context Switches        18
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           8
+       
+ 
+ 137        TITLE;
+ 138        
+ 139        *The median week of birth (weeknum) is the 33rd week of the year 2015. There are no observations
+ 140        with missing data for weeknum and the range of data is consistent with what is expected. There are 53
+ 141        weeks in the year 2015, and the range of data for weeknum is week 2 to week 50.;
+ 142        
+ 143        PROC MEANS DATA = epid795.birthscohort N NMISS MEAN STD RANGE MEDIAN P5 P95;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 144        VAR weeknum;
+ 145        TITLE "Descriptive statistics for week of birth in 2015";
+ 146        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set EPID795.BIRTHSCOHORT.
+ NOTE: PROCEDURE MEANS used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.00 seconds
+       memory              7727.96k
+       OS Memory           41672.00k
+       Timestamp           11/21/2021 12:02:53 AM
+       Step Count                        30  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     1703
+       Page Swaps                        0
+       Voluntary Context Switches        43
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           24
+       
+ 
+ 147        TITLE;
+ 148        *checking for any missing observations, mean, std dev, range, median, 5th and 9th percentile;
+ 149        
+ 150        PROC FREQ DATA = epid795.birthscohort;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 151        TABLE weeknum / MISSING;
+ 152        TITLE 'PROC FREQ of Year 2015 Week of Birth';
+ 153        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set EPID795.BIRTHSCOHORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.08 seconds
+       user cpu time       0.08 seconds
+       system cpu time     0.00 seconds
+       memory              1627.53k
+       OS Memory           35752.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        31  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     214
+       Page Swaps                        0
+       Voluntary Context Switches        29
+       Involuntary Context Switches      15
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 154        *checking range of data;
+ 155        
+ 156        *Question A2.2;
+ 157        PROC SGPLOT DATA = epid795.birthscohort;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 158        HISTOGRAM weeknum / BINWIDTH = 1;
+ 159        TITLE "Distribution of week of births in 2015";
+ 160        RUN;
+ 
+ NOTE: PROCEDURE SGPLOT used (Total process time):
+       real time           0.24 seconds
+       user cpu time       0.11 seconds
+       system cpu time     0.02 seconds
+       memory              3922.93k
+       OS Memory           37036.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        32  Switch Count  12
+       Page Faults                       0
+       Page Reclaims                     1250
+       Page Swaps                        0
+       Voluntary Context Switches        200
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           4736
+       
+ NOTE: There were 61447 observations read from the data set EPID795.BIRTHSCOHORT.
+ 
+ 161        TITLE;
+ 162        
+ 163        *The data for weeknum does not have extreme, out of range, or inplausible values.;
+ 164        
+ 165        *Question A2.3;
+ 166        PROC SORT DATA = epid795.birthscohort OUT = births2; *new dataset sorting by weeks;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 167        BY weeks;
+ 168        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set EPID795.BIRTHSCOHORT.
+ NOTE: The data set WORK.BIRTHS2 has 61447 observations and 9 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.10 seconds
+       user cpu time       0.09 seconds
+       system cpu time     0.01 seconds
+       memory              13221.43k
+       OS Memory           47592.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        33  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     2807
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           17432
+       
+ 
+ 169        
+ 170        PROC SGPLOT DATA = epid795.birthscohort;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 171        SCATTER X = weeknum Y = weeks;
+ 172        XAXIS LABEL = "2015 Calendar Week";
+ 173        YAXIS LABEL = "Gestational Age (Weeks) at Birth";
+ 174        TITLE 'Gestational Age (Weeks) at Birth By 2015 Calendar Week of Birth';
+ 175        RUN;
+ 
+ NOTE: PROCEDURE SGPLOT used (Total process time):
+       real time           0.28 seconds
+       user cpu time       0.07 seconds
+       system cpu time     0.01 seconds
+       memory              2680.71k
+       OS Memory           36460.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        34  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     631
+       Page Swaps                        0
+       Voluntary Context Switches        158
+       Involuntary Context Switches      1
+       Block Input Operations            0
+       Block Output Operations           2328
+       
+ NOTE: Marker and line antialiasing has been disabled for at least one plot because the threshold has been reached. You can set 
+       ANTIALIASMAX=61500 in the ODS GRAPHICS statement to enable antialiasing for all plots.
+ NOTE: There were 61447 observations read from the data set EPID795.BIRTHSCOHORT.
+ 
+ 176        
+ 177        *Data meets all eligibility criteria
+ 178        The earliest week in the year in which a term birth can occur is the 38th week. For this study, births that
+ 179        ocurred on or after the first day of the 38th week are term.
+ 180        The latest week in the year in which a preterm birth can occur is 17th week. There are 53 weeks in the year
+ 181        2015. The study consists of births with the entire 17-week risk period for preterm birth occurring within
+ 182        the year 2015. Since the 37th week of gestation is the last week of the risk period for preterm birth,
+ 183        53-37+1 = 17th week.;
+ 184        
+ 185        
+ 186        *Question A3.1;
+ 187        DATA births3; *new dataset that adds variable pwk;
+ 188        SET epid795.birthscohort;
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 189        pwk = MIN(17, weeks - 19.5); *created new variable using MIN function. pwk classifies each birth
+ 190        according to person-weeks at risk where term births are pwk=17 (max person-weeks at risk for preterm
+ 191        birth. For preterm births, they occured in the middle of the week.;
+ 192        LABEL pwk = "Person-weeks at risk of pre-term birth"
+ 193           weeks="Weeks of gestation"
+ 194          weeknum="2015 calendar week of birth";
+ 195        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set EPID795.BIRTHSCOHORT.
+ NOTE: The data set WORK.BIRTHS3 has 61447 observations and 10 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.08 seconds
+       user cpu time       0.07 seconds
+       system cpu time     0.01 seconds
+       memory              3044.81k
+       OS Memory           36520.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        35  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     291
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           18448
+       
+ 
+ 196        
+ 197        PROC CONTENTS DATA = births3;
+ 198        TITLE "New dataset with pwk variable";
+ 199        RUN;
+ 
+ NOTE: PROCEDURE CONTENTS used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.00 seconds
+       memory              2531.59k
+       OS Memory           36264.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        36  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     285
+       Page Swaps                        0
+       Voluntary Context Switches        11
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           8
+       
+ 
+ 200        TITLE;
+ 201        *checking to make sure new variable was created;
+ 202        
+ 203        PROC PRINT DATA = births3 (OBS = 10) LABEL;
+ 204        VAR pwk;
+ 205        TITLE "Risk period for preterm birth";
+ 206        RUN;
+ 
+ NOTE: There were 10 observations read from the data set WORK.BIRTHS3.
+ NOTE: PROCEDURE PRINT used (Total process time):
+       real time           0.01 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.00 seconds
+       memory              1971.18k
+       OS Memory           36004.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        37  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     306
+       Page Swaps                        0
+       Voluntary Context Switches        10
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           16
+       
+ 
+ 207        TITLE;
+ 208        *checking to make sure variable does as intended;
+ 209        
+ 210        PROC PRINT DATA = epid795.birthscohort (OBS = 10);
+ NOTE: Data file EPID795.BIRTHSCOHORT.DATA is in a format that is native to another host, or the file encoding does not match the 
+       session encoding. Cross Environment Data Access will be used, which might require additional CPU resources and might reduce 
+       performance.
+ 211        VAR weeks;
+ 212        TITLE "Number of weeks of gestional age completed at birth";
+ 213        RUN;
+ 
+ NOTE: There were 10 observations read from the data set EPID795.BIRTHSCOHORT.
+ NOTE: PROCEDURE PRINT used (Total process time):
+       real time           0.01 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.00 seconds
+       memory              1445.46k
+       OS Memory           35492.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        38  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     163
+       Page Swaps                        0
+       Voluntary Context Switches        11
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 214        TITLE;
+ 215        *checking to make sure variable does as intended;
+ 216        
+ 217        PROC FREQ DATA = births3;
+ 218        TABLE weeks*pwk / MISSING LIST;
+ 219        TITLE 'Completed weeks of gestation (calculated) by person-time at risk';
+ 220        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS3.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.05 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.01 seconds
+       memory              2971.87k
+       OS Memory           37044.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        39  Switch Count  10
+       Page Faults                       0
+       Page Reclaims                     516
+       Page Swaps                        0
+       Voluntary Context Switches        59
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           1064
+       
+ 
+ 221        *checking data again;
+ 222        
+ 223        *Question A3.2;
+ 224        PROC UNIVARIATE DATA = births3;
+ 225        VAR pwk;
+ 226        WHERE . < pwk < 17;
+ 227        TITLE "Descriptive statistics for person-time at risk";
+ 228        RUN;
+ 
+ NOTE: PROCEDURE UNIVARIATE used (Total process time):
+       real time           0.06 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.01 seconds
+       memory              2253.59k
+       OS Memory           36264.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        40  Switch Count  11
+       Page Faults                       0
+       Page Reclaims                     302
+       Page Swaps                        0
+       Voluntary Context Switches        39
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           24
+       
+ 
+ 229        TITLE;
+ 230        *Among preterm births, the mean of person-time at risk is 14 person-weeks and the standard deviation
+ 231        is 3.4 person-weeks.;
+ 232        
+ 233        
+ 234        *Question A4.1;
+ 235        PROC FORMAT ;
+ 236        
+ 236      !  VALUE pretermf
+ 237        . = "Missing"
+ 238        0 = "Term"
+ 239        1 = "Preterm";
+ NOTE: Format PRETERMF has been output.
+ 240        RUN;
+ 
+ NOTE: PROCEDURE FORMAT used (Total process time):
+       real time           0.00 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.00 seconds
+       memory              319.43k
+       OS Memory           34976.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        41  Switch Count  2
+       Page Faults                       0
+       Page Reclaims                     58
+       Page Swaps                        0
+       Voluntary Context Switches        13
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           56
+       
+ 
+ 241        
+ 242        DATA births4; *dataset that includes the new preterm variable;
+ 243        SET births3;
+ 244        IF missing(weeks) or weeks = 99 THEN preterm = .;
+ 245        ELSE IF weeks >= 37 THEN preterm = 0;
+ 246        ELSE IF 20 <= weeks <= 36 THEN preterm = 1;
+ 247        LABEL preterm = "Birth Status";
+ 248        FORMAT preterm pretermf.;
+ 249        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS3.
+ NOTE: The data set WORK.BIRTHS4 has 61447 observations and 11 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.01 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              3593.37k
+       OS Memory           37800.00k
+       Timestamp           11/21/2021 12:02:54 AM
+       Step Count                        42  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     499
+       Page Swaps                        0
+       Voluntary Context Switches        23
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           19464
+       
+ 
+ 250        *preterm variable is based on weeks variable(completed weeks of gestation). Preterm is defined as
+ 251        live birth with 20 - <37 weeks of gestation completed. Term is defined as greater than or equal to 37
+ 252        weeks of gestation completed.;
+ 253        
+ 254        PROC PRINT DATA = births4 (OBS = 700) LABEL;
+ 255        VAR weeks preterm;
+ 256        TITLE "Weeks and Birth Status";
+ 257        RUN;
+ 
+ NOTE: There were 700 observations read from the data set WORK.BIRTHS4.
+ NOTE: PROCEDURE PRINT used (Total process time):
+       real time           0.41 seconds
+       user cpu time       0.42 seconds
+       system cpu time     0.00 seconds
+       memory              1976.37k
+       OS Memory           36004.00k
+       Timestamp           11/21/2021 12:02:55 AM
+       Step Count                        43  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     254
+       Page Swaps                        0
+       Voluntary Context Switches        10
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           160
+       
+ 
+ 258        TITLE;
+ 259        *checking to make sure variable does as intended;
+ 260        
+ 261        PROC FREQ DATA = births4;
+ 262        TABLE weeks*preterm / MISSING LIST;
+ 263        TITLE 'Completed weeks of gestation (calculated) by preterm birth';
+ 264        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS4.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.01 seconds
+       memory              2965.59k
+       OS Memory           37044.00k
+       Timestamp           11/21/2021 12:02:55 AM
+       Step Count                        44  Switch Count  9
+       Page Faults                       0
+       Page Reclaims                     506
+       Page Swaps                        0
+       Voluntary Context Switches        53
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           1072
+       
+ 
+ 265        *checking data again;
+ 266        
+ 267        *Question A4.2;
+ 268        PROC SGPLOT DATA = births4;
+ 269        VBAR preterm / STAT = percent;
+ 270        VLINE preterm / STAT = percent LINEATTRS = (THICKNESS = 0px) datalabel;
+ 271        TITLE "Proportion of birth status";
+ 272        RUN;
+ 
+ NOTE: PROCEDURE SGPLOT used (Total process time):
+       real time           0.21 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.01 seconds
+       memory              3766.79k
+       OS Memory           37292.00k
+       Timestamp           11/21/2021 12:02:55 AM
+       Step Count                        45  Switch Count  8
+       Page Faults                       0
+       Page Reclaims                     1205
+       Page Swaps                        0
+       Voluntary Context Switches        158
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           392
+       
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS4.
+ 
+ 273        TITLE;
+ 274        PROC FREQ DATA = births4;
+ 275        TABLE preterm / MISSING;
+ 276        TITLE 'Proportion of births that were term and preterm';
+ 277        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS4.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2187.62k
+       OS Memory           36264.00k
+       Timestamp           11/21/2021 12:02:55 AM
+       Step Count                        46  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        20
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 278        *8.4% of all births in the data are preterm births.;
+ 279        
+ 280        PROC FREQ DATA = births4;
+ 281        WHERE preterm = 1;
+ 282        TABLE weeks / MISSING;
+ 283        TITLE 'Completed weeks of gestation (calculated) by preterm birth among 17-week risk period';
+ 284        RUN;
+ 
+ NOTE: There were 5132 observations read from the data set WORK.BIRTHS4.
+       WHERE preterm=1;
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              2200.96k
+       OS Memory           36264.00k
+       Timestamp           11/21/2021 12:02:55 AM
+       Step Count                        47  Switch Count  6
+       Page Faults                       0
+       Page Reclaims                     312
+       Page Swaps                        0
+       Voluntary Context Switches        32
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 285        *40% of preterm births occured in the final week (week 36) of the 17-week risk period.;
+ 286        
+ 287        *Question B1;
+ 288        PROC FREQ DATA = births4;
+ 289        TABLES prenatal;
+ 290        TITLE "All data including women who received or did not receive prenatal care";
+ 291        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS4.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              2184.59k
+       OS Memory           36264.00k
+       Timestamp           11/21/2021 12:02:55 AM
+       Step Count                        48  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        27
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 292        TITLE;
+ 293        *checking to see if there are any unknown (99) or no prenatal care (88) observations;
+ 294        *there are 1461 observations who received not prenatal care (88) and 606 observations with
+ 295        unknown information about prenatal care (99) that would need to be accounted for before
+ 296        analysis of data;
+ 297        
+ 298        DATA births4n; *creating numeric versions of prenatal variable;
+ 299        SET births4;
+ 300        prenatal_num = prenatal+0;
+ 301        RUN;
+ 
+ NOTE: Character values have been converted to numeric values at the places given by: (Line):(Column).
+       300:17   
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS4.
+ NOTE: The data set WORK.BIRTHS4N has 61447 observations and 12 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.01 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.02 seconds
+       memory              3577.75k
+       OS Memory           37800.00k
+       Timestamp           11/21/2021 12:02:55 AM
+       Step Count                        49  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     497
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           20232
+       
+ 
+ 302        *Check numeric recode;
+ 303        
+ 304        PROC UNIVARIATE DATA = births4n;
+ 305        VAR prenatal_num;
+ 306        TITLE 'PROC UNIVARIATE: Month of pregnancy when prenatal care began';
+ 307        RUN;
+ 
+ NOTE: PROCEDURE UNIVARIATE used (Total process time):
+       real time           0.05 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.00 seconds
+       memory              2074.71k
+       OS Memory           36004.00k
+       Timestamp           11/21/2021 12:02:55 AM
+       Step Count                        50  Switch Count  2
+       Page Faults                       0
+       Page Reclaims                     247
+       Page Swaps                        0
+       Voluntary Context Switches        13
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 308        
+ 309        *Question B2;
+ 310        DATA births5; *dataset that drops observations where prenatal care is unknown or no;
+ 311        SET births4;
+ 312        IF prenatal > 9 THEN DELETE;
+ 313        RUN;
+ 
+ NOTE: Character values have been converted to numeric values at the places given by: (Line):(Column).
+       312:5   
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS4.
+ NOTE: The data set WORK.BIRTHS5 has 59380 observations and 11 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.01 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              3572.28k
+       OS Memory           38056.00k
+       Timestamp           11/21/2021 12:02:55 AM
+       Step Count                        51  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     529
+       Page Swaps                        0
+       Voluntary Context Switches        22
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           18696
+       
+ 
+ 314        
+ 315        PROC PRINT DATA = births5 (OBS = 150);
+ 316        TITLE "Women who received prenatal care";
+ 317        RUN;
+ 
+ NOTE: There were 150 observations read from the data set WORK.BIRTHS5.
+ NOTE: PROCEDURE PRINT used (Total process time):
+       real time           0.28 seconds
+       user cpu time       0.29 seconds
+       system cpu time     0.01 seconds
+       memory              2060.00k
+       OS Memory           36004.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        52  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     254
+       Page Swaps                        0
+       Voluntary Context Switches        13
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           112
+       
+ 
+ 318        TITLE;
+ 319        
+ 320        PROC PRINT DATA = births4 (OBS = 150);
+ 321        TITLE "All data including women who received or did not receive prenatal care";
+ 322        RUN;
+ 
+ NOTE: There were 150 observations read from the data set WORK.BIRTHS4.
+ NOTE: PROCEDURE PRINT used (Total process time):
+       real time           0.26 seconds
+       user cpu time       0.27 seconds
+       system cpu time     0.00 seconds
+       memory              2059.53k
+       OS Memory           36004.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        53  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     252
+       Page Swaps                        0
+       Voluntary Context Switches        8
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           96
+       
+ 
+ 323        TITLE;
+ 324        *checking to make sure observations where prenatal = 99 or 88 were deleted;
+ 325        
+ 326        PROC FREQ DATA = births5; *this dataset only includes women known to have received prenatal care;
+ 327        TABLES prenatal;
+ 328        TITLE "Frequency among women who received prenatal care";
+ 329        RUN;
+ 
+ NOTE: There were 59380 observations read from the data set WORK.BIRTHS5.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              2187.43k
+       OS Memory           36264.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        54  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        28
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 330        TITLE;
+ 331        *Among women known to have received prenatal care, 38% of women most commonly began prenatal care in
+ 332        month 3;
+ 333        
+ 334        
+ 335        *Question B2.1;
+ 336        PROC FORMAT;
+ 337        
+ 337      !  VALUE pnc5f
+ 338        . = "Missing"
+ 339        0 = "No"
+ 340        1 = "Yes";
+ NOTE: Format PNC5F has been output.
+ 341        RUN;
+ 
+ NOTE: PROCEDURE FORMAT used (Total process time):
+       real time           0.00 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.00 seconds
+       memory              271.65k
+       OS Memory           34976.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        55  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     14
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 342        
+ 343        DATA births6; *dataset that includes the new pnc5 variable;
+ 344        SET births4n;
+ 345        IF prenatal_num = 99 THEN pnc5 = .;
+ 346        ELSE IF prenatal_num in (88,6:9) THEN pnc5 = 0;
+ 347        ELSE IF 1 <= prenatal_num <= 5 THEN pnc5 = 1;
+ 348        LABEL prenatal_num = "Month in which prenatal care began (recoded)"
+ 349        pnc5 = "Prenatal Care in First 5 Months of Gestation";
+ 350        FORMAT pnc5 pnc5f.;
+ 351        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS4N.
+ NOTE: The data set WORK.BIRTHS6 has 61447 observations and 13 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.01 seconds
+       memory              3587.46k
+       OS Memory           37800.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        56  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     502
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           21256
+       
+ 
+ 352        *pnc5 variable is based off prenatal variable (month of pregnancy when prenatal care began. pnc5 identifies
+ 353        if an observation received prenatal care in the first 5 months of gestation. pnc5=0 if no prenatal care,
+ 354        pnc5=1 if prenatal care received, pnc5=. if unknown.;
+ 355        
+ 356        PROC PRINT DATA = births6 (OBS = 250) LABEL;
+ 357        VAR prenatal pnc5;
+ 358        TITLE "Prenatal Care Start Month and Prenatal Care in First 5 Months of Gestation";
+ 359        RUN;
+ 
+ NOTE: There were 250 observations read from the data set WORK.BIRTHS6.
+ NOTE: PROCEDURE PRINT used (Total process time):
+       real time           0.16 seconds
+       user cpu time       0.17 seconds
+       system cpu time     0.00 seconds
+       memory              1975.62k
+       OS Memory           36004.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        57  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     252
+       Page Swaps                        0
+       Voluntary Context Switches        8
+       Involuntary Context Switches      1
+       Block Input Operations            0
+       Block Output Operations           64
+       
+ 
+ 360        TITLE;
+ 361        *checking to make sure variable does as intended;
+ 362        
+ 363        PROC FREQ DATA = births6;
+ 364        TABLE prenatal*pnc5 / LIST MISSPRINT;
+ 365        TITLE 'Prenatal Care in First 20 Weeks, By Month in which Prenatal Care Began';
+ 366        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.01 seconds
+       memory              2969.15k
+       OS Memory           37044.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        58  Switch Count  10
+       Page Faults                       0
+       Page Reclaims                     509
+       Page Swaps                        0
+       Voluntary Context Switches        52
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           1056
+       
+ 
+ 367        
+ 368        *Question B2.2;
+ 369        PROC FREQ DATA = births6;
+ 370        TABLES pnc5 / MISSPRINT;
+ 371        TITLE "Overall prenatal care in first 5 months of gestation";
+ 372        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              2182.65k
+       OS Memory           36264.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        59  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        23
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 373        TITLE;
+ 374        *counts and proportions of observations in each category of pnc5 in the study population as a whole;
+ 375        
+ 376        PROC FREQ DATA = births6;
+ 377        TABLES pnc5 / MISSPRINT;
+ 378        WHERE preterm = 1;
+ 379        TITLE "Prenatal care in first 5 months of gestation where birth status is preterm";
+ 380        RUN;
+ 
+ NOTE: There were 5132 observations read from the data set WORK.BIRTHS6.
+       WHERE preterm=1;
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2191.50k
+       OS Memory           36264.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        60  Switch Count  8
+       Page Faults                       0
+       Page Reclaims                     312
+       Page Swaps                        0
+       Voluntary Context Switches        37
+       Involuntary Context Switches      4
+       Block Input Operations            0
+       Block Output Operations           272
+       
+ 
+ 381        TITLE;
+ 382        *counts and proportions of observations in each category of pnc5 in the study population when birth
+ 383        status is preterm;
+ 384        
+ 385        PROC FREQ DATA = births6;
+ 386        TABLES pnc5 / MISSPRINT;
+ 387        WHERE preterm = 0;
+ 388        TITLE "Prenatal care in first 5 months of gestation where birth status is term";
+ 389        RUN;
+ 
+ NOTE: There were 56315 observations read from the data set WORK.BIRTHS6.
+       WHERE preterm=0;
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.00 seconds
+       memory              2206.96k
+       OS Memory           36264.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        61  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        24
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 390        TITLE;
+ 391        *counts and proportions of observations in each category of pnc5 in the study population when birth
+ 392        status is term;
+ 393        
+ 394        *BELOW IS ANOTHER WAY TO DO THIS;
+ 395        PROC SORT DATA = births6 OUT = births6_sort;
+ 396        BY preterm;
+ 397        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6.
+ NOTE: The data set WORK.BIRTHS6_SORT has 61447 observations and 13 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.02 seconds
+       memory              15492.62k
+       OS Memory           49560.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        62  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     3369
+       Page Swaps                        0
+       Voluntary Context Switches        23
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           21264
+       
+ 
+ 398        
+ 399        *Examine counts and proportions for prenatal care BY preterm birth status;
+ 400        PROC FREQ DATA = births6_sort;
+ 401        BY preterm;
+ 402        TABLE pnc5 / MISSING;
+ 403        TITLE 'Early prenatal care (in the first 20 weeks of gestation) by preterm birth status';
+ 404        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6_SORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              2296.84k
+       OS Memory           36520.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        63  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     346
+       Page Swaps                        0
+       Voluntary Context Switches        20
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 405        
+ 406        *Percentage with preterm birth BY receipt of early prenatal care;
+ 407        PROC SORT DATA = births6 OUT = births6_sort2;
+ 408        BY pnc5;
+ 409        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6.
+ NOTE: The data set WORK.BIRTHS6_SORT2 has 61447 observations and 13 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.02 seconds
+       memory              15496.68k
+       OS Memory           49560.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        64  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     3287
+       Page Swaps                        0
+       Voluntary Context Switches        19
+       Involuntary Context Switches      1
+       Block Input Operations            0
+       Block Output Operations           21264
+       
+ 
+ 410        
+ 411        PROC FREQ DATA = births6_sort2;
+ 412        BY pnc5;
+ 413        TABLE preterm / MISSING;
+ 414        TITLE 'Preterm birth status by early prenatal care (in the first 20 weeks of gestation)';
+ 415        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6_SORT2.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.00 seconds
+       memory              2283.40k
+       OS Memory           36520.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        65  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     315
+       Page Swaps                        0
+       Voluntary Context Switches        29
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 416        
+ 417        
+ 418        *Question B2.3;
+ 419        PROC FREQ DATA = births6_sort2;
+ 420        BY pnc5;
+ 421        TABLE preterm / MISSING;
+ 422        TITLE 'Preterm birth status by early prenatal care (in the first 20 weeks of gestation)';
+ 423        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6_SORT2.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.00 seconds
+       memory              2283.25k
+       OS Memory           36520.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        66  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        24
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 424        TITLE;
+ 425        
+ 426        *Among women who received prenatal care during the first 5 months of gestation, 7.8% had a preterm birth;
+ 427        
+ 428        
+ 429        *Question B2.4 (Question 8);
+ 430        PROC FREQ DATA = births6_sort2;
+ 431        BY pnc5;
+ 432        TABLE preterm / MISSING;
+ 433        TITLE 'Preterm birth status by early prenatal care (in the first 20 weeks of gestation)';
+ 434        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6_SORT2.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.00 seconds
+       memory              2289.96k
+       OS Memory           36520.00k
+       Timestamp           11/21/2021 12:02:56 AM
+       Step Count                        67  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        24
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 435        TITLE;
+ 436        
+ 437        *Among women who did not receive prenatal care during the first 5 months of gestation, 12% had a
+ 438        preterm birth;
+ 439        
+ 440        
+ 441        *Question C1.1;
+ 442        PROC CONTENTS DATA = births6;
+ 443        TITLE "PROC CONTENTS of births6";
+ 444        RUN;
+ 
+ NOTE: PROCEDURE CONTENTS used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.00 seconds
+       memory              2286.71k
+       OS Memory           36520.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        68  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     286
+       Page Swaps                        0
+       Voluntary Context Switches        13
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           24
+       
+ 
+ 445        TITLE;
+ 446        *variable name for mother's age is in all caps;
+ 447        *MAGE is character variable;
+ 448        
+ 449        PROC FREQ DATA = births6;
+ 450        TABLE MAGE;
+ 451        TITLE "PROC FREQ of age of mother";
+ 452        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.01 seconds
+       memory              2186.46k
+       OS Memory           36520.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        69  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        28
+       Involuntary Context Switches      4
+       Block Input Operations            0
+       Block Output Operations           288
+       
+ 
+ 453        TITLE;
+ 454        *no missing variables but some unknown age 99 that need to be accounted for;
+ 455        
+ 456        DATA births7; *creating new dataset with numeric versions of MAGE variable;
+ 457        SET births6;
+ 458        mage_num = MAGE + 0;
+ 459        IF MAGE = 99 THEN mage_num = .;
+ 460        RUN;
+ 
+ NOTE: Character values have been converted to numeric values at the places given by: (Line):(Column).
+       458:13   459:5    
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS6.
+ NOTE: The data set WORK.BIRTHS7 has 61447 observations and 14 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              3580.81k
+       OS Memory           38056.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        70  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     495
+       Page Swaps                        0
+       Voluntary Context Switches        19
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           22280
+       
+ 
+ 461        
+ 462        PROC FREQ DATA = births7;
+ 463        TABLE mage_num / MISSING;
+ 464        TITLE "PROC FREQ of age of mother (recoded)";
+ 465        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS7.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.01 seconds
+       memory              2200.56k
+       OS Memory           36520.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        71  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        27
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 466        TITLE;
+ 467        *checking to make sure new variable is created and recoded correctly;
+ 468        
+ 469        PROC UNIVARIATE DATA = births7;
+ 470        VAR mage_num;
+ 471        TITLE "PROC UNIVARIATE of age of mother";
+ 472        RUN;
+ 
+ NOTE: PROCEDURE UNIVARIATE used (Total process time):
+       real time           0.06 seconds
+       user cpu time       0.06 seconds
+       system cpu time     0.00 seconds
+       memory              2155.96k
+       OS Memory           36260.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        72  Switch Count  2
+       Page Faults                       0
+       Page Reclaims                     247
+       Page Swaps                        0
+       Voluntary Context Switches        13
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           16
+       
+ 
+ 473        TITLE;
+ 474        
+ 475        PROC MEANS DATA = births7 N NMISS MEAN STD RANGE MEDIAN P5 P95;
+ 476        VAR mage_num;
+ 477        TITLE "PROC MEANS of age of mother";
+ 478        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS7.
+ NOTE: PROCEDURE MEANS used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              8258.46k
+       OS Memory           42440.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        73  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     1800
+       Page Swaps                        0
+       Voluntary Context Switches        38
+       Involuntary Context Switches      3
+       Block Input Operations            0
+       Block Output Operations           8
+       
+ 
+ 479        TITLE;
+ 480        *For maternal age in the whole population, there are no observations missing data.
+ 481        One observation had unknown age coded as "99", which was recoded to missing "."
+ 482        *The mean maternal age is 28 years old and the standard deviation is 5.8 years.;
+ 483        
+ 484        PROC SORT DATA = births7 OUT = births7_sort; *sorting data by preterm;
+ 485        BY preterm;
+ 486        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS7.
+ NOTE: The data set WORK.BIRTHS7_SORT has 61447 observations and 14 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.03 seconds
+       memory              15446.62k
+       OS Memory           49540.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        74  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     3410
+       Page Swaps                        0
+       Voluntary Context Switches        22
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           22288
+       
+ 
+ 487        
+ 488        PROC UNIVARIATE DATA = births7_sort;
+ 489        VAR mage_num;
+ 490        BY preterm;
+ 491        TITLE "PROC UNIVARIATE of age of mother by birth status";
+ 492        RUN;
+ 
+ NOTE: PROCEDURE UNIVARIATE used (Total process time):
+       real time           0.11 seconds
+       user cpu time       0.11 seconds
+       system cpu time     0.00 seconds
+       memory              2254.37k
+       OS Memory           36260.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        75  Switch Count  2
+       Page Faults                       0
+       Page Reclaims                     245
+       Page Swaps                        0
+       Voluntary Context Switches        12
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           32
+       
+ 
+ 493        TITLE;
+ 494        
+ 495        PROC MEANS DATA = births7_sort N NMISS MEAN STD RANGE MEDIAN P5 P95;
+ 496        VAR mage_num;
+ 497        BY preterm;
+ 498        TITLE "PROC MEANS of age of mother by birth status";
+ 499        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS7_SORT.
+ NOTE: PROCEDURE MEANS used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              3115.03k
+       OS Memory           37288.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        76  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     372
+       Page Swaps                        0
+       Voluntary Context Switches        20
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           16
+       
+ 
+ 500        TITLE;
+ 501        
+ 502        
+ 503        *Question C1.2;
+ 504        PROC SGPLOT DATA = births7;
+ 505        VBAR mage_num;
+ 506        YAXIS LABEL = "Number of Eligible Births" LABELATTRS = (size = 12);
+ 507        XAXIS FITPOLICY = THIN LABEL = "Maternal Age (years)" LABELATTRS = (size = 12);
+ 508        TITLE HEIGHT = 1.7 "Distribution of Maternal Age for";
+ 509        TITLE2 HEIGHT = 1.7 "North Carolina Births";
+ 510        FOOTNOTE HEIGHT = 1.1 "Figure 2. Maternal age was measured from a cohort study population of
+ 511        61,446 North Carolina live births in 2015. All data were derived from North Carolina
+ 512        Live Birth Certificate data for 2015. The study population included live singleton births without
+ 513        congenital malformations that experienced the entire risk period for preterm birth (the 17-week
+ NOTE: The quoted string currently being processed has become more than 262 bytes long.  You might have unbalanced quotation marks.
+ 514        interval beginning with the 21st week of gestation and ending upon completion of the 37th week of
+ 515        gestation) during 2015. Births with unknown gestational age were excluded. Maternal age in the total
+ 516        population has a minimum of 11 years, maximum of 49 years, median and mean of 28 years,
+ 517        and standard deviation of 5.8 years.";
+ 518        RUN;
+ 
+ NOTE: Since no format is assigned, the numeric category variable will use the default of BEST6.
+ NOTE: PROCEDURE SGPLOT used (Total process time):
+       real time           0.19 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.01 seconds
+       memory              3898.90k
+       OS Memory           37548.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        77  Switch Count  6
+       Page Faults                       0
+       Page Reclaims                     688
+       Page Swaps                        0
+       Voluntary Context Switches        174
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           536
+       
+ NOTE: Some of the tick values have been thinned.
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS7.
+ 
+ 519        TITLE;
+ 520        TITLE2;
+ 521        FOOTNOTE;
+ 522        
+ 523        
+ 524        *Question C2.1;
+ 525        PROC MEANS DATA = births7 MEAN;
+ 526        WHERE mage_num in(44:50);
+ 527        VAR mage_num;
+ 528        RUN;
+ 
+ NOTE: There were 184 observations read from the data set WORK.BIRTHS7.
+       WHERE (mage_num=INT(mage_num)) and (mage_num>=44 and mage_num<=50);
+ NOTE: PROCEDURE MEANS used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              8275.68k
+       OS Memory           42440.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        78  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     1812
+       Page Swaps                        0
+       Voluntary Context Switches        26
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 529        *the mean is 44.7500 years;
+ 530        
+ 531        PROC MEANS DATA = births7 MEAN;
+ 532        WHERE mage_num in(0:14);
+ 533        VAR mage_num;
+ 534        RUN;
+ 
+ NOTE: There were 46 observations read from the data set WORK.BIRTHS7.
+       WHERE (mage_num=INT(mage_num)) and (mage_num>=0 and mage_num<=14);
+ NOTE: PROCEDURE MEANS used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.00 seconds
+       memory              8237.43k
+       OS Memory           42440.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        79  Switch Count  2
+       Page Faults                       0
+       Page Reclaims                     1798
+       Page Swaps                        0
+       Voluntary Context Switches        23
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 535        *the mean is 13.8260870 years;
+ 536        
+ 537        PROC FREQ DATA = births7;
+ 538        TABLE mage_num;
+ 539        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS7.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.01 seconds
+       memory              2186.21k
+       OS Memory           36520.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        80  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     313
+       Page Swaps                        0
+       Voluntary Context Switches        17
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 540        *hand calculating the mean age to check code;
+ 541        
+ 542        DATA births8; *dataset that includes the new mage2 variable;
+ 543        SET births7;
+ 544        IF missing(mage_num) or mage_num = 99 THEN mage2 = .;
+ 545        ELSE IF mage_num in (44:50) THEN mage2 = 44.7500;
+ 546        ELSE IF mage_num in (0:14) THEN mage2 = 13.8261;
+ 547        ELSE IF mage_num in (15:43) THEN mage2 = mage_num;
+ 548        LABEL mage2 = "Condensed maternal age (age 44 or older in a single category; age 14 or younger in
+ 549        a single category)";
+ 550        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS7.
+ NOTE: The data set WORK.BIRTHS8 has 61447 observations and 15 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.02 seconds
+       memory              3583.31k
+       OS Memory           38056.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        81  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     494
+       Page Swaps                        0
+       Voluntary Context Switches        24
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           23304
+       
+ 
+ 551        
+ 552        PROC FREQ DATA = births8;
+ 553        TABLE mage_num*mage2 / LIST MISSPRINT;
+ 554        TITLE 'Maternal age, By Condensed maternal age';
+ 555        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.06 seconds
+       user cpu time       0.06 seconds
+       system cpu time     0.00 seconds
+       memory              2976.87k
+       OS Memory           37300.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        82  Switch Count  10
+       Page Faults                       0
+       Page Reclaims                     506
+       Page Swaps                        0
+       Voluntary Context Switches        66
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           1072
+       
+ 
+ 556        TITLE;
+ 557        *checking to make sure variable is created as intended;
+ 558        
+ 559        
+ 560        *Question C2.2;
+ 561        PROC UNIVARIATE DATA = births8;
+ 562        VAR mage2;
+ 563        TITLE "PROC UNIVARIATE of maternal age (condensed)";
+ 564        RUN;
+ 
+ NOTE: PROCEDURE UNIVARIATE used (Total process time):
+       real time           0.06 seconds
+       user cpu time       0.07 seconds
+       system cpu time     0.00 seconds
+       memory              2152.09k
+       OS Memory           36260.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        83  Switch Count  2
+       Page Faults                       0
+       Page Reclaims                     245
+       Page Swaps                        0
+       Voluntary Context Switches        13
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           16
+       
+ 
+ 565        TITLE;
+ 566        *The minimum value for mage2 is 14 years, and the maximum value for mage2 is 45 years;
+ 567        
+ 568        PROC MEANS DATA = births8 N NMISS MEAN STD RANGE MEDIAN P5 P95;
+ 569        VAR mage2;
+ 570        TITLE "PROC MEANS of maternal age (condensed)";
+ 571        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8.
+ NOTE: PROCEDURE MEANS used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              8209.53k
+       OS Memory           42440.00k
+       Timestamp           11/21/2021 12:02:57 AM
+       Step Count                        84  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     1798
+       Page Swaps                        0
+       Voluntary Context Switches        39
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 572        TITLE;
+ 573        *checking the descriptive statistics;
+ 574        
+ 575        PROC UNIVARIATE DATA = births7;
+ 576        VAR mage_num;
+ 577        TITLE "PROC UNIVARIATE of age of mother";
+ 578        RUN;
+ 
+ NOTE: PROCEDURE UNIVARIATE used (Total process time):
+       real time           0.06 seconds
+       user cpu time       0.07 seconds
+       system cpu time     0.01 seconds
+       memory              2139.84k
+       OS Memory           36260.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        85  Switch Count  2
+       Page Faults                       0
+       Page Reclaims                     245
+       Page Swaps                        0
+       Voluntary Context Switches        12
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           16
+       
+ 
+ 579        TITLE;
+ 580        
+ 581        PROC MEANS DATA = births7 N NMISS MEAN STD RANGE MEDIAN P5 P95;
+ 582        VAR mage_num;
+ 583        TITLE "PROC MEANS of age of mother";
+ 584        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS7.
+ NOTE: PROCEDURE MEANS used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              8211.96k
+       OS Memory           42440.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        86  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     1798
+       Page Swaps                        0
+       Voluntary Context Switches        38
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 585        TITLE;
+ 586        *comparing mage2 to mage;
+ 587        *When rounded, the mean, standard deviation, median, 5th and 95th percentile for mage2 and mage is the same.
+ 588        The range is different because the minimum and maximum values differ between the two variables. The range
+ 589        for mage is 38 and the range for mage2 is 31;
+ 590        
+ 591        *Question C2.3;
+ 592        PROC SGPLOT DATA = births8;
+ 593        VBAR mage2;
+ 594        YAXIS LABEL = "Number of Eligible Births" LABELATTRS = (size = 12);
+ 595        XAXIS FITPOLICY = ROTATETHIN LABEL = "Maternal Age (years)" LABELATTRS = (size = 12);
+ 596        TITLE HEIGHT = 1.7 "Distribution of Condensed Maternal Age for NC Births";
+ 597        RUN;
+ 
+ NOTE: Since no format is assigned, the numeric category variable will use the default of BEST6.
+ NOTE: PROCEDURE SGPLOT used (Total process time):
+       real time           0.12 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.00 seconds
+       memory              3644.09k
+       OS Memory           37548.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        87  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     770
+       Page Swaps                        0
+       Voluntary Context Switches        149
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           488
+       
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8.
+ 
+ 598        TITLE;
+ 599        
+ 600        
+ 601        *Question C3.1;
+ 602        PROC FREQ DATA = births8;
+ 603        TABLE race;
+ 604        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2172.21k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        88  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        16
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 605        
+ 606        PROC CONTENTS DATA = births8;
+ 607        RUN;
+ 
+ NOTE: PROCEDURE CONTENTS used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.00 seconds
+       memory              2373.53k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        89  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     285
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           24
+       
+ 
+ 608        *viewing data. race is a character variable;
+ 609        
+ 610        DATA births8n; *creating numeric versions of race variable;
+ 611        SET births8;
+ 612        race_num = race+0;
+ 613        LABEL race_num = "Race of mother/child (numeric)";
+ 614        RUN;
+ 
+ NOTE: Character values have been converted to numeric values at the places given by: (Line):(Column).
+       612:13   
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8.
+ NOTE: The data set WORK.BIRTHS8N has 61447 observations and 16 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              3593.59k
+       OS Memory           38312.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        90  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     494
+       Page Swaps                        0
+       Voluntary Context Switches        23
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           24072
+       
+ 
+ 615        
+ 616        PROC FORMAT;
+ 617        
+ 617      !  VALUE racef
+ 618        . = "Missing"
+ 619        1 = "White"
+ 620        2 = "African American"
+ 621        3 = "American Indian or Alaska Native"
+ 622        4 = "Other";
+ NOTE: Format RACEF has been output.
+ 623        RUN;
+ 
+ NOTE: PROCEDURE FORMAT used (Total process time):
+       real time           0.00 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.00 seconds
+       memory              280.43k
+       OS Memory           35488.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        91  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     14
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           8
+       
+ 
+ 624        
+ 625        PROC FREQ DATA = births8n;
+ 626        TABLE race_num;
+ 627        FORMAT race_num racef.;
+ 628        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8N.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.00 seconds
+       memory              2205.43k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        92  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     327
+       Page Swaps                        0
+       Voluntary Context Switches        16
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 629        
+ 630        
+ 631        *Question C3.2;
+ 632        PROC UNIVARIATE DATA = births8n;
+ 633        VAR race_num;
+ 634        RUN;
+ 
+ NOTE: PROCEDURE UNIVARIATE used (Total process time):
+       real time           0.05 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.00 seconds
+       memory              2029.71k
+       OS Memory           36516.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        93  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     245
+       Page Swaps                        0
+       Voluntary Context Switches        6
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           16
+       
+ 
+ 635        *there are no extreme or inplausible values for race. The range of values is 1-4, which is plausible;
+ 636        
+ 637        
+ 638        *Question C4;
+ 639        PROC MEANS DATA = births8n N NMISS MEAN STD RANGE MEDIAN P5 P95;
+ 640        VAR race_num;
+ 641        TITLE "Descriptive statistics for race";
+ 642        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8N.
+ NOTE: PROCEDURE MEANS used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              8320.87k
+       OS Memory           42696.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        94  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     1798
+       Page Swaps                        0
+       Voluntary Context Switches        37
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 643        TITLE;
+ 644        *there is no missing data for race;
+ 645        
+ 646        PROC FREQ DATA = births8n;
+ 647        TABLE race_num;
+ 648        TITLE "PROC FREQ of race";
+ 649        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8N.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.00 seconds
+       memory              2173.71k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        95  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        29
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 650        TITLE;
+ 651        *counts and proportions of observations in each race category in population as a whole;
+ 652        
+ 653        PROC SORT DATA = births8n OUT = births8n_sort; *sorting data by preterm;
+ 654        BY preterm;
+ 655        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8N.
+ NOTE: The data set WORK.BIRTHS8N_SORT has 61447 observations and 16 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.02 seconds
+       memory              16443.96k
+       OS Memory           50796.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        96  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     3658
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      1
+       Block Input Operations            0
+       Block Output Operations           24080
+       
+ 
+ 656        
+ 657        PROC FREQ DATA = births8n_sort;
+ 658        TABLE race_num / MISSPRINT;
+ 659        BY preterm;
+ 660        TITLE "PROC FREQ of race by birth status";
+ 661        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8N_SORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.01 seconds
+       memory              2265.87k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        97  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        24
+       Involuntary Context Switches      2
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 662        TITLE;
+ 663        *counts and proportions of observations in each race category by birth status;
+ 664        *no observations have missing data for the variable race;
+ 665        
+ 666        
+ 667        *Question C5.1;
+ 668        PROC FORMAT;
+ 669        
+ 669      !  VALUE race2f
+ 670        . = "Missing"
+ 671        0 = "White (referent)"
+ 672        1 = "African American"
+ 673        2 = "Other";
+ NOTE: Format RACE2F has been output.
+ 674        RUN;
+ 
+ NOTE: PROCEDURE FORMAT used (Total process time):
+       real time           0.00 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.00 seconds
+       memory              246.25k
+       OS Memory           35488.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        98  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     14
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 675        
+ 676        DATA births9; *dataset that includes the new race2 variable;
+ 677        SET births8n;
+ 678        IF missing(race_num) or race_num = . THEN race2 = .;
+ 679        ELSE IF race_num = 1 THEN race2 = 0;
+ 680        ELSE IF race_num = 2 THEN race2 = 1;
+ 681        ELSE IF race_num in (3, 4) THEN race2 = 2;
+ 682        LABEL race2 = "Race of mother/child (recoded)"
+ 683        race2 = "Race of mother/child recoded to compare white, african american, and other";
+ 684        FORMAT race2 race2f.;
+ 685        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS8N.
+ NOTE: The data set WORK.BIRTHS9 has 61447 observations and 17 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              3623.75k
+       OS Memory           38312.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        99  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     495
+       Page Swaps                        0
+       Voluntary Context Switches        16
+       Involuntary Context Switches      1
+       Block Input Operations            0
+       Block Output Operations           25096
+       
+ 
+ 686        
+ 687        PROC FREQ DATA = births9;
+ 688        TABLE race_num*race2 / LIST MISSPRINT;
+ 689        TITLE "PROC FREQ of recoded race of mother/child and race";
+ 690        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS9.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2981.84k
+       OS Memory           37556.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        100  Switch Count  10
+       Page Faults                       0
+       Page Reclaims                     506
+       Page Swaps                        0
+       Voluntary Context Switches        60
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           1056
+       
+ 
+ 691        TITLE;
+ 692        
+ 693        PROC FREQ DATA = births9;
+ 694        TABLE race2 / LIST MISSPRINT;
+ 695        TITLE "PROC FREQ of recoded race of mother/child";
+ 696        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS9.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              2169.81k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        101  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        28
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 697        TITLE;
+ 698        *checking to make sure new variable was created as intended;
+ 699        
+ 700        PROC FREQ DATA = births9;
+ 701        TABLE race2;
+ 702        TITLE "PROC FREQ of recoded race";
+ 703        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS9.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2170.81k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        102  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        26
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 704        TITLE;
+ 705        *counts and proportions of observations in each new race category in population as a whole;
+ 706        
+ 707        PROC SORT DATA = births9 OUT = births9_sort; *sorting data by preterm;
+ 708        BY preterm;
+ 709        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS9.
+ NOTE: The data set WORK.BIRTHS9_SORT has 61447 observations and 17 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.02 seconds
+       memory              17447.37k
+       OS Memory           51812.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        103  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     3779
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           25104
+       
+ 
+ 710        
+ 711        PROC FREQ DATA = births9_sort;
+ 712        TABLE race2;
+ 713        BY preterm;
+ 714        TITLE "PROC FREQ of recoded race by birth status";
+ 715        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS9_SORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              2266.68k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        104  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        26
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 716        TITLE;
+ 717        *counts and proportion of observation in each new race category by birth status;
+ 718        
+ 719        
+ 720        *Question C6.1;
+ 721        PROC CONTENTS DATA = births9;
+ 722        RUN;
+ 
+ NOTE: PROCEDURE CONTENTS used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.00 seconds
+       memory              2288.37k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        105  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     285
+       Page Swaps                        0
+       Voluntary Context Switches        1
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           24
+       
+ 
+ 723        *viewing data. hispmom is character variable;
+ 724        
+ 725        PROC FREQ DATA = births9;
+ 726        TABLE hispmom;
+ 727        TITLE "PROC FREQ of Hispanic origin of mother";
+ 728        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS9.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2173.75k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        106  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        26
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 729        TITLE;
+ 730        
+ 731        PROC FORMAT;
+ 732        
+ 732      !  VALUE mhispf
+ 733        . = "Missing"
+ 734        0 = "non-Hispanic (referent)"
+ 735        1 = "Hispanic";
+ NOTE: Format MHISPF has been output.
+ 736        RUN;
+ 
+ NOTE: PROCEDURE FORMAT used (Total process time):
+       real time           0.00 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.00 seconds
+       memory              302.87k
+       OS Memory           35488.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        107  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     14
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 737        
+ 738        DATA births10; *dataset that includes the new mhisp variable;
+ 739        SET births9;
+ 740        IF missing(hispmom) or hispmom = "U" THEN mhisp = .;
+ 741        ELSE IF hispmom = "N" THEN mhisp = 0;
+ 742        ELSE IF hispmom = "Y" THEN mhisp = 1;
+ 743        LABEL mhisp = "Hispanic origin of mother (recoded)"
+ 744        mhisp = "Hispanic origin of mother recoded to compare Hispanic or non-Hispanic";
+ 745        FORMAT mhisp mhispf.;
+ 746        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS9.
+ NOTE: The data set WORK.BIRTHS10 has 61447 observations and 18 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              3574.81k
+       OS Memory           38312.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        108  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     494
+       Page Swaps                        0
+       Voluntary Context Switches        20
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           26120
+       
+ 
+ 747        
+ 748        PROC FREQ DATA = births10;
+ 749        TABLE hispmom*mhisp / LIST MISSPRINT;
+ 750        TITLE "PROC FREQ of recoded hispnic origin and original";
+ 751        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS10.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.01 seconds
+       memory              2924.93k
+       OS Memory           37556.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        109  Switch Count  11
+       Page Faults                       0
+       Page Reclaims                     506
+       Page Swaps                        0
+       Voluntary Context Switches        68
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           1056
+       
+ 
+ 752        TITLE;
+ 753        *checking that new variable was created as intended;
+ 754        
+ 755        
+ 756        *Question C6.2;
+ 757        PROC FREQ DATA = births10;
+ 758        TABLE mhisp / MISSPRINT;
+ 759        TITLE "PROC FREQ of recoded Hispanic origin of mother";
+ 760        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS10.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2173.87k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        110  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        28
+       Involuntary Context Switches      3
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 761        TITLE;
+ 762        *counts and proportions of observations in each new race category in population as a whole;
+ 763        
+ 764        PROC SORT DATA = births10 OUT = births10_sort; *sorting data by preterm;
+ 765        BY preterm;
+ 766        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS10.
+ NOTE: The data set WORK.BIRTHS10_SORT has 61447 observations and 18 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.02 seconds
+       memory              17482.31k
+       OS Memory           51796.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        111  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     3907
+       Page Swaps                        0
+       Voluntary Context Switches        24
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           26128
+       
+ 
+ 767        
+ 768        PROC FREQ DATA = births10_sort;
+ 769        TABLE mhisp / MISSPRINT;
+ 770        BY preterm;
+ 771        TITLE "PROC FREQ of recoded Hispnic origin of mother by birth status";
+ 772        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS10_SORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.01 seconds
+       memory              2268.46k
+       OS Memory           36776.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        112  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        28
+       Involuntary Context Switches      1
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 773        TITLE;
+ 774        *counts and proportion of observation in each new race category by birth status;
+ 775        *Among mothers in the study population with non-missing data concerning their Hispanic ethnicity,
+ 776        15% are of Hispanic origin;
+ 777        
+ 778        
+ 779        *Question C7.1;
+ 780        PROC FORMAT;
+ 781        
+ 781      !  VALUE racethf
+ 782        . = "Missing"
+ 783        0 = "White/non-Hispanic (referent)"
+ 784        1 = "White/Hispanic"
+ 785        2 = "African American/non-Hispanic"
+ 786        3 = "African American/Hispanic"
+ 787        4 = "Other/non-Hispanic"
+ 788        5 = "Other/Hispanic";
+ NOTE: Format RACETHF has been output.
+ 789        RUN;
+ 
+ NOTE: PROCEDURE FORMAT used (Total process time):
+       real time           0.00 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.00 seconds
+       memory              246.75k
+       OS Memory           35488.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        113  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     14
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 790        
+ 791        DATA births11; *dataset that includes the new raceth variable;
+ 792        SET births10;
+ 793        IF mhisp = . AND race2 = . THEN raceth = .;
+ 794        ELSE IF mhisp = 0 AND race2 = 0 THEN raceth = 0;
+ 795        ELSE IF mhisp = 1 AND race2 = 0 THEN raceth = 1;
+ 796        ELSE IF mhisp = 0 AND race2 = 1 THEN raceth = 2;
+ 797        ELSE IF mhisp = 1 AND race2 = 1 THEN raceth = 3;
+ 798        ELSE IF mhisp = 0 AND race2 = 2 THEN raceth = 4;
+ 799        ELSE IF mhisp = 1 AND race2 = 2 THEN raceth = 5;
+ 800        LABEL raceth = "Mothers race and ethnicity";
+ 801        FORMAT raceth racethf.;
+ 802        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS10.
+ NOTE: The data set WORK.BIRTHS11 has 61447 observations and 19 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              3577.56k
+       OS Memory           38312.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        114  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     496
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           27144
+       
+ 
+ 803        
+ 804        PROC FREQ DATA = births11;
+ 805        TABLE mhisp*race2*raceth / LIST MISSPRINT;
+ 806        TITLE "PROC FREQ of race, ethnicity, and race/ethnicity";
+ 807        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS11.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.01 seconds
+       memory              3045.81k
+       OS Memory           37812.00k
+       Timestamp           11/21/2021 12:02:58 AM
+       Step Count                        115  Switch Count  11
+       Page Faults                       0
+       Page Reclaims                     506
+       Page Swaps                        0
+       Voluntary Context Switches        58
+       Involuntary Context Switches      1
+       Block Input Operations            0
+       Block Output Operations           1072
+       
+ 
+ 808        TITLE;
+ 809        *checking that new variable is created as intended;
+ 810        
+ 811        
+ 812        *Question C7.2;
+ 813        PROC FREQ DATA = births11;
+ 814        TABLE raceth / MISSPRINT;
+ 815        TITLE "PROC FREQ of mother's race and ethnicity";
+ 816        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS11.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              2175.62k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        116  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        26
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 817        TITLE;
+ 818        *counts and proportions of observations in each new race category in population as a whole;
+ 819        
+ 820        PROC SORT DATA = births11 OUT = births11_sort; *sorting data by preterm;
+ 821        BY preterm;
+ 822        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS11.
+ NOTE: The data set WORK.BIRTHS11_SORT has 61447 observations and 19 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.02 seconds
+       memory              18436.03k
+       OS Memory           53068.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        117  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     4024
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           27152
+       
+ 
+ 823        
+ 824        PROC FREQ DATA = births11_sort;
+ 825        TABLE raceth / MISSPRINT;
+ 826        BY preterm;
+ 827        TITLE "PROC FREQ of mother's race and ethnicity by birth status";
+ 828        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS11_SORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.01 seconds
+       memory              2268.50k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        118  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        28
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 829        TITLE;
+ 830        *counts and proportion of observation in each new race category by birth status;
+ 831        
+ 832        
+ 833        *Question C8;
+ 834        PROC FORMAT;
+ 835        
+ 835      !  VALUE raceth2f
+ 836        . = "Missing"
+ 837        0 = "White/non-Hispanic (referent)"
+ 838        1 = "White/Hispanic"
+ 839        2 = "African American"
+ 840        3 = "Other";
+ NOTE: Format RACETH2F has been output.
+ 841        RUN;
+ 
+ NOTE: PROCEDURE FORMAT used (Total process time):
+       real time           0.00 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.00 seconds
+       memory              246.75k
+       OS Memory           35744.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        119  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     14
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           8
+       
+ 
+ 842        
+ 843        DATA births12; *dataset that includes the new raceth2 variable;
+ 844        SET births11;
+ 845        IF mhisp = . AND race2 = 0 THEN raceth2 = .;
+ 846        ELSE IF mhisp = 0 AND race2 = 0 THEN raceth2 = 0;
+ 847        ELSE IF mhisp = 1 AND race2 = 0 THEN raceth2 = 1;
+ 848        ELSE IF race2 = 1 THEN raceth2 = 2;
+ 849        ELSE IF race2 = 2 THEN raceth2 = 3;
+ 850        LABEL raceth2 = "Mothers race and ethnicity (recoded)";
+ 851        FORMAT raceth2 raceth2f.;
+ 852        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS11.
+ NOTE: The data set WORK.BIRTHS12 has 61447 observations and 20 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              3687.84k
+       OS Memory           38568.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        120  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     496
+       Page Swaps                        0
+       Voluntary Context Switches        18
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           27912
+       
+ 
+ 853        
+ 854        PROC FREQ DATA = births12;
+ 855        TABLE mhisp*race2*raceth2 / LIST MISSPRINT;
+ 856        TITLE "PROC FREQ of race, ethnicity, and recoded race/ethnicity";
+ 857        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS12.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.01 seconds
+       memory              3043.15k
+       OS Memory           37812.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        121  Switch Count  11
+       Page Faults                       0
+       Page Reclaims                     506
+       Page Swaps                        0
+       Voluntary Context Switches        59
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           1072
+       
+ 
+ 858        TITLE;
+ 859        *checking that new variable does as intended;
+ 860        
+ 861        PROC FREQ DATA = births12;
+ 862        TABLE raceth2 / MISSPRINT;
+ 863        TITLE "PROC FREQ of mother's race and ethnicity (recoded)";
+ 864        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS12.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2177.28k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        122  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        29
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 865        TITLE;
+ 866        *13 observations have missing data for raceth2;
+ 867        
+ 868        
+ 869        *Question C9;
+ 870        PROC CONTENTS DATA = births12;
+ 871        RUN;
+ 
+ NOTE: PROCEDURE CONTENTS used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.00 seconds
+       memory              2182.59k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        123  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     285
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           24
+       
+ 
+ 872        *cigdur is a character variable;
+ 873        
+ 874        PROC FREQ DATA = births12;
+ 875        TABLE cigdur;
+ 876        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS12.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              2062.34k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        124  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        19
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 877        *there are 22 unknown observations;
+ 878        
+ 879        PROC FORMAT;
+ 880        
+ 880      !  VALUE smokerf
+ 881        . = "Missing"
+ 882        0 = "Non-smoker"
+ 883        1 = "Smoker";
+ NOTE: Format SMOKERF has been output.
+ 884        RUN;
+ 
+ NOTE: PROCEDURE FORMAT used (Total process time):
+       real time           0.00 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.00 seconds
+       memory              358.96k
+       OS Memory           35744.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        125  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     14
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 885        
+ 886        DATA births13; *dataset that includes the new smoker variable;
+ 887        SET births12;
+ 888        IF missing(cigdur) or cigdur = "U" THEN smoker = .;
+ 889        ELSE IF cigdur = "N" THEN smoker = 0;
+ 890        ELSE IF cigdur = "Y" THEN smoker = 1;
+ 891        LABEL smoker = "Maternal smoking during pregnancy";
+ 892        FORMAT smoker smokerf.;
+ 893        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS12.
+ NOTE: The data set WORK.BIRTHS13 has 61447 observations and 21 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.02 seconds
+       memory              3698.43k
+       OS Memory           38568.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        126  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     494
+       Page Swaps                        0
+       Voluntary Context Switches        23
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           28936
+       
+ 
+ 894        
+ 895        PROC FREQ DATA = births13;
+ 896        TABLE cigdur*smoker / LIST MISSPRINT;
+ 897        TITLE "PROC FREQ of cigdur and smoker";
+ 898        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS13.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              2981.06k
+       OS Memory           37812.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        127  Switch Count  11
+       Page Faults                       0
+       Page Reclaims                     506
+       Page Swaps                        0
+       Voluntary Context Switches        61
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           1056
+       
+ 
+ 899        TITLE;
+ 900        *checking that new variable created as intended;
+ 901        
+ 902        PROC FREQ DATA = births13;
+ 903        TABLE smoker / MISSPRINT;
+ 904        TITLE "PROC FREQ of maternal smoking during pregnancy";
+ 905        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS13.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              2177.68k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        128  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        27
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 906        TITLE;
+ 907        *counts and proportions of observations in each new race category in population as a whole;
+ 908        
+ 909        PROC SORT DATA = births13 OUT = births13_sort; *sorting data by preterm;
+ 910        BY preterm;
+ 911        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS13.
+ NOTE: The data set WORK.BIRTHS13_SORT has 61447 observations and 21 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.02 seconds
+       memory              19426.15k
+       OS Memory           54076.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        129  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     4268
+       Page Swaps                        0
+       Voluntary Context Switches        22
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           28944
+       
+ 
+ 912        
+ 913        PROC FREQ DATA = births13_sort;
+ 914        TABLE smoker / MISSPRINT;
+ 915        BY preterm;
+ 916        TITLE "PROC FREQ of maternal smoking during pregnancy by birth status";
+ 917        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS13_SORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.01 seconds
+       memory              2270.34k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        130  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        30
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 918        TITLE;
+ 919        *counts and proportion of observation in each new race category by birth status;
+ 920        
+ 921        
+ 922        *Question C10;
+ 923        PROC CONTENTS DATA = births13;
+ 924        RUN;
+ 
+ NOTE: PROCEDURE CONTENTS used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.00 seconds
+       memory              2182.18k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        131  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     285
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           40
+       
+ 
+ 925        *"SEX" is a character variable;
+ 926        
+ 927        PROC FREQ DATA = births13;
+ 928        TABLE SEX;
+ 929        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS13.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.01 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.00 seconds
+       memory              2171.40k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        132  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        20
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 930        *there are no unknown sex (coded by 9 in data);
+ 931        
+ 932        PROC FORMAT;
+ 933        
+ 933      !  VALUE sex_numf
+ 934        . = "Missing"
+ 935        1 = "Male"
+ 936        2 = "Female";
+ NOTE: Format SEX_NUMF has been output.
+ 937        RUN;
+ 
+ NOTE: PROCEDURE FORMAT used (Total process time):
+       real time           0.00 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.00 seconds
+       memory              358.40k
+       OS Memory           35744.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        133  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     14
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 938        
+ 939        DATA births14; *creating new dataset with numeric versions of SEX variable;
+ 940        SET births13;
+ 941        sex_num = SEX + 0;
+ 942        IF missing(SEX) or SEX = "9" THEN sex_num = .;
+ 943        LABEL sex_num = "Sex of child";
+ 944        FORMAT sex_num sex_numf.;
+ 945        RUN;
+ 
+ NOTE: Character values have been converted to numeric values at the places given by: (Line):(Column).
+       941:12   
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS13.
+ NOTE: The data set WORK.BIRTHS14 has 61447 observations and 22 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              3695.03k
+       OS Memory           38568.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        134  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     494
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      1
+       Block Input Operations            0
+       Block Output Operations           29960
+       
+ 
+ 946        
+ 947        PROC FREQ DATA = births14;
+ 948        TABLE SEX*sex_num / LIST MISSPRINT;
+ 949        TITLE "PROC FREQ of SEX and sex (recoded)";
+ 950        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS14.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.01 seconds
+       memory              3039.71k
+       OS Memory           37812.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        135  Switch Count  11
+       Page Faults                       0
+       Page Reclaims                     506
+       Page Swaps                        0
+       Voluntary Context Switches        61
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           1056
+       
+ 
+ 951        TITLE;
+ 952        *checking variable created as intended;
+ 953        
+ 954        PROC FREQ DATA = births14;
+ 955        TABLE sex_num / MISSPRINT;
+ 956        TITLE "PROC FREQ of sex of child";
+ 957        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS14.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.00 seconds
+       memory              2288.90k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        136  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        29
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 958        TITLE;
+ 959        *counts and proportions of observations in each new race category in population as a whole;
+ 960        
+ 961        PROC SORT DATA = births14 OUT = births14_sort; *sorting data by preterm;
+ 962        BY preterm;
+ 963        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS14.
+ NOTE: The data set WORK.BIRTHS14_SORT has 61447 observations and 22 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.02 seconds
+       memory              19416.68k
+       OS Memory           54064.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        137  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     4402
+       Page Swaps                        0
+       Voluntary Context Switches        20
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           29968
+       
+ 
+ 964        
+ 965        PROC FREQ DATA = births14_sort;
+ 966        TABLE sex_num / MISSPRINT;
+ 967        BY preterm;
+ 968        TITLE "PROC FREQ of sex of child by birth status";
+ 969        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS14_SORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.00 seconds
+       memory              2383.50k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        138  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        28
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 970        TITLE;
+ 971        *counts and proportion of observation in each new race category by birth status;
+ 972        
+ 973        
+ 974        *Question D1;
+ 975        PROC CONTENTS DATA = births14;
+ 976        RUN;
+ 
+ NOTE: PROCEDURE CONTENTS used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.01 seconds
+       memory              2181.34k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        139  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     285
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           24
+       
+ 
+ 977        *variables of interest are pnc5, race_num, mhisp, mage_num, smoker, and sex_num;
+ 978        
+ 979        DATA births15; *new dataset that has variable calculating any missing numeric values;
+ 980        SET births14;
+ 981        IF NMISS(OF pnc5, race_num, mhisp, mage_num, smoker, sex_num) > 0 THEN anymissnum = "Yes";
+ 982        ELSE anymissnum = "No";
+ 983        LABEL anymissnum = "Any missing numeric value for pnc5, race_num, mhisp, mage_num, smoker, and sex_
+ 984        num";
+ 985        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS14.
+ NOTE: The data set WORK.BIRTHS15 has 61447 observations and 23 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.01 seconds
+       system cpu time     0.01 seconds
+       memory              3703.25k
+       OS Memory           38568.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        140  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     496
+       Page Swaps                        0
+       Voluntary Context Switches        21
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           30984
+       
+ 
+ 986        
+ 987        PROC FREQ DATA = births15;
+ 988        TABLES anymissnum;
+ 989        TITLE "PROC FREQ of any missing numeric value for pnc5, race_num, mhisp, mage_num, smoker, and sex_
+ 990        num";
+ 991        RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS15.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2171.28k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        141  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        27
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 992        TITLE;
+ 993        *The total number of observations that have missing values for any of the 6 covariates is 652 observations.;
+ 994        
+ 995        *Question D2;
+ 996        PROC FREQ DATA = births15;
+ 997        TABLES pnc5 / MISSPRINT;
+ 998        TABLES race_num / MISSPRINT;
+ 999        TABLES mhisp / MISSPRINT;
+ 1000       TABLES mage_num / MISSPRINT;
+ 1001       TABLES smoker / MISSPRINT;
+ 1002       TABLES sex_num / MISSPRINT;
+ 1003       TITLE "PROC FREQ of prenatal care, race, Hispanic ethnicity, maternal age, smoking during pregnancy,
+ 1004       and child's sex";
+ 1005       RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS15.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.09 seconds
+       user cpu time       0.09 seconds
+       system cpu time     0.00 seconds
+       memory              2484.56k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        142  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     317
+       Page Swaps                        0
+       Voluntary Context Switches        29
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           304
+       
+ 
+ 1006       TITLE;
+ 1007       
+ 1008       PROC FREQ DATA = births15;
+ 1009       TABLES pnc5 / MISSING;
+ 1010       TABLES prenatal / MISSING;
+ 1011       TITLE "PROC FREQ of prenatal care";
+ 1012       RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS15.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.01 seconds
+       memory              2189.96k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        143  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        30
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 1013       TITLE;
+ 1014       *The name of the covariate in the original birthscohort.sas7bdat data set that has the greatest number
+ 1015       of missing values is "prenatal". It has 606 missing values. The percentage with missing data for the
+ 1016       covariate "prenatal" is 0.99%.;
+ 1017       
+ 1018       
+ 1019       *Question D3;
+ 1020       PROC FREQ DATA = births15;
+ 1021       TABLES anymissnum*preterm / MISSING NOCOL NOROW;
+ 1022       WHERE preterm = 0;
+ 1023       TITLE "PROC FREQ of missing numeric values for 6 covariates among term births";
+ 1024       RUN;
+ 
+ NOTE: There were 56315 observations read from the data set WORK.BIRTHS15.
+       WHERE preterm=0;
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.04 seconds
+       system cpu time     0.01 seconds
+       memory              2496.12k
+       OS Memory           37292.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        144  Switch Count  282
+       Page Faults                       0
+       Page Reclaims                     430
+       Page Swaps                        0
+       Voluntary Context Switches        728
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           544
+       
+ 
+ 1025       *N = 54, 0.97% term births with any missing covariate data;
+ 1026       
+ 1027       
+ 1028       *Question D4;
+ 1029       PROC FREQ DATA = births15;
+ 1030       TABLES anymissnum*preterm / MISSING NOCOL NOROW;
+ 1031       WHERE preterm = 1;
+ 1032       TITLE "PROC FREQ of missing numeric values for 6 covariates among preterm births";
+ 1033       RUN;
+ 
+ NOTE: There were 5132 observations read from the data set WORK.BIRTHS15.
+       WHERE preterm=1;
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2441.81k
+       OS Memory           37292.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        145  Switch Count  6
+       Page Faults                       0
+       Page Reclaims                     384
+       Page Swaps                        0
+       Voluntary Context Switches        39
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           528
+       
+ 
+ 1034       *N = 107, 2.1% preterm births with any missing covariate data;
+ 1035       
+ 1036       
+ 1037       *Question D5;
+ 1038       DATA births16; *new dataset that has variable calculating 2 or more missing numeric values;
+ 1039       SET births15;
+ 1040       IF NMISS(OF pnc5, race_num, mhisp, mage_num, smoker, sex_num) >= 2 THEN anymissnum2 = "Yes";
+ 1041       ELSE anymissnum2 = "No";
+ 1042       LABEL anymissnum2 = "2 or more missing numeric value for pnc5, race_num, mhisp, mage_num, smoker,
+ 1043       and sex_num";
+ 1044       RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS15.
+ NOTE: The data set WORK.BIRTHS16 has 61447 observations and 24 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.02 seconds
+       memory              3582.78k
+       OS Memory           38824.00k
+       Timestamp           11/21/2021 12:02:59 AM
+       Step Count                        146  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     530
+       Page Swaps                        0
+       Voluntary Context Switches        24
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           30984
+       
+ 
+ 1045       
+ 1046       PROC FREQ DATA = births16;
+ 1047       TABLES anymissnum2;
+ 1048       TITLE "PROC FREQ of 2 or more missing numeric value for pnc5, race_num, mhisp, mage_num, smoker,
+ 1049       and sex_num";
+ 1050       RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS16.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.00 seconds
+       memory              2176.96k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:03:00 AM
+       Step Count                        147  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     315
+       Page Swaps                        0
+       Voluntary Context Switches        20
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 1051       TITLE;
+ 1052       *checking that new variable was created as intended;
+ 1053       
+ 1054       PROC FREQ DATA = births16;
+ 1055       TABLES anymissnum2*preterm / MISSING NOCOL NOROW;
+ 1056       WHERE preterm = 0;
+ 1057       TITLE "PROC FREQ of 2 or more missing numeric values for 6 covariates among term births";
+ 1058       RUN;
+ 
+ NOTE: There were 56315 observations read from the data set WORK.BIRTHS16.
+       WHERE preterm=0;
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.03 seconds
+       user cpu time       0.03 seconds
+       system cpu time     0.01 seconds
+       memory              2446.06k
+       OS Memory           37292.00k
+       Timestamp           11/21/2021 12:03:00 AM
+       Step Count                        148  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     376
+       Page Swaps                        0
+       Voluntary Context Switches        33
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           528
+       
+ 
+ 1059       TITLE;
+ 1060       *4 term births were missing values for two or more covariates;
+ 1061       
+ 1062       
+ 1063       *Question D6;
+ 1064       PROC FREQ DATA = births16;
+ 1065       TABLES anymissnum2*preterm / MISSING NOCOL NOROW;
+ 1066       WHERE preterm = 1;
+ 1067       TITLE "PROC FREQ of 2 or more missing numeric values for 6 covariates among preterm births";
+ 1068       RUN;
+ 
+ NOTE: There were 5132 observations read from the data set WORK.BIRTHS16.
+       WHERE preterm=1;
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.02 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.01 seconds
+       memory              2331.84k
+       OS Memory           37292.00k
+       Timestamp           11/21/2021 12:03:00 AM
+       Step Count                        149  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     376
+       Page Swaps                        0
+       Voluntary Context Switches        34
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           544
+       
+ 
+ 1069       TITLE;
+ 1070       *2 preterm births were missing values for two or more covariates;
+ 1071       
+ 1072       
+ 1073       *Question D7;
+ 1074       DATA births17; *new dataset of only observations with 2 or more missing covariate values;
+ 1075       SET births16;
+ 1076       WHERE anymissnum2 = "Yes";
+ 1077       RUN;
+ 
+ NOTE: There were 6 observations read from the data set WORK.BIRTHS16.
+       WHERE anymissnum2='Yes';
+ NOTE: The data set WORK.BIRTHS17 has 6 observations and 24 variables.
+ NOTE: DATA statement used (Total process time):
+       real time           0.01 seconds
+       user cpu time       0.00 seconds
+       system cpu time     0.00 seconds
+       memory              2218.71k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:03:00 AM
+       Step Count                        150  Switch Count  3
+       Page Faults                       0
+       Page Reclaims                     314
+       Page Swaps                        0
+       Voluntary Context Switches        19
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           264
+       
+ 
+ 1078       
+ 1079       PROC PRINT DATA = births17;
+ 1080       VAR pnc5 mage_num mhisp smoker race_num sex_num;
+ 1081       TITLE "PROC FREQ of 2 or more missing numeric values for 6 covariate combinations";
+ 1082       RUN;
+ 
+ NOTE: There were 6 observations read from the data set WORK.BIRTHS17.
+ NOTE: PROCEDURE PRINT used (Total process time):
+       real time           0.01 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.00 seconds
+       memory              756.46k
+       OS Memory           36004.00k
+       Timestamp           11/21/2021 12:03:00 AM
+       Step Count                        151  Switch Count  1
+       Page Faults                       0
+       Page Reclaims                     60
+       Page Swaps                        0
+       Voluntary Context Switches        6
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           0
+       
+ 
+ 1083       TITLE;
+ 1084       
+ 1085       *Part A;
+ 1086       *No observed combinations of missing prenatal care and maternal age;
+ 1087       
+ 1088       *Part B;
+ 1089       *2 observed combinations of missing prenatal care and Hispanic ethnicity;
+ 1090       
+ 1091       *Part C;
+ 1092       *3 observed combinations of missing prenatal care and smoking during pregnancy;
+ 1093       
+ 1094       *Part D;
+ 1095       *No observed combinations of missing race and smoking during pregnancy;
+ 1096       
+ 1097       *Part E;
+ 1098       *3 observed combinations of missing Hispanic ethnicity and smoking during pregnancy;
+ 1099       
+ 1100       *Part F;
+ 1101       *1 observed combinations of missing prenatal care, Hispanic ethnicity, and smoking during pregnancy;
+ 1102       
+ 1103       *Part G;
+ 1104       *No observed combinations of missing prenatal care, smoking during pregnancy, and maternal age;
+ 1105       
+ 1106       *B, C, E, and F are observed combinations of missing covariates;
+ 1107       
+ 1108       *Table 1;
+ 1109       PROC CONTENTS DATA = births16;
+ 1110       RUN;
+ 
+ NOTE: PROCEDURE CONTENTS used (Total process time):
+       real time           0.05 seconds
+       user cpu time       0.06 seconds
+       system cpu time     0.00 seconds
+       memory              2186.71k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:03:00 AM
+       Step Count                        152  Switch Count  0
+       Page Faults                       0
+       Page Reclaims                     285
+       Page Swaps                        0
+       Voluntary Context Switches        0
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           32
+       
+ 
+ 1111       
+ 1112       PROC FREQ DATA = births16;
+ 1113       TABLES pnc5 / MISSPRINT;
+ 1114       TABLES raceth/ MISSPRINT;
+ 1115       TABLES smoker / MISSPRINT;
+ 1116       TABLES sex_num / MISSPRINT;
+ 1117       TITLE "PROC FREQ of prenatal care, race/ethnicity, smoking during pregnancy, and child's sex";
+ 1118       RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS16.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.05 seconds
+       user cpu time       0.05 seconds
+       system cpu time     0.00 seconds
+       memory              2396.34k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:03:00 AM
+       Step Count                        153  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     311
+       Page Swaps                        0
+       Voluntary Context Switches        28
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           280
+       
+ 
+ 1119       TITLE;
+ 1120       
+ 1121       PROC SORT DATA = births16 OUT = births16_sort; *sorting data by preterm;
+ 1122       BY preterm;
+ 1123       RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS16.
+ NOTE: The data set WORK.BIRTHS16_SORT has 61447 observations and 24 variables.
+ NOTE: PROCEDURE SORT used (Total process time):
+       real time           0.04 seconds
+       user cpu time       0.02 seconds
+       system cpu time     0.03 seconds
+       memory              20316.15k
+       OS Memory           55084.00k
+       Timestamp           11/21/2021 12:03:00 AM
+       Step Count                        154  Switch Count  4
+       Page Faults                       0
+       Page Reclaims                     4554
+       Page Swaps                        0
+       Voluntary Context Switches        24
+       Involuntary Context Switches      0
+       Block Input Operations            0
+       Block Output Operations           30992
+       
+ 
+ 1124       
+ 1125       PROC FREQ DATA = births16_sort;
+ 1126       BY preterm;
+ 1127       TABLES pnc5 / MISSPRINT;
+ 1128       TABLES raceth/ MISSPRINT;
+ 1129       TABLES smoker / MISSPRINT;
+ 1130       TABLES sex_num / MISSPRINT;
+ 1131       TITLE "PROC FREQ of prenatal care, race/ethnicity, smoking during pregnancy, and child's sex by
+ 1132       birth status";
+ 1133       RUN;
+ 
+ NOTE: There were 61447 observations read from the data set WORK.BIRTHS16_SORT.
+ NOTE: PROCEDURE FREQ used (Total process time):
+       real time           0.10 seconds
+       user cpu time       0.10 seconds
+       system cpu time     0.01 seconds
+       memory              2489.12k
+       OS Memory           37032.00k
+       Timestamp           11/21/2021 12:03:00 AM
+       Step Count                        155  Switch Count  5
+       Page Faults                       0
+       Page Reclaims                     321
+       Page Swaps                        0
+       Voluntary Context Switches        29
+       Involuntary Context Switches      6
+       Block Input Operations            0
+       Block Output Operations           296
+       
+ 
+ 1134       TITLE;
+ 1135       
+ 1136       
+ 1137       
+ 1138       OPTIONS NONOTES NOSTIMER NOSOURCE NOSYNTAXCHECK;
+ 1148       
